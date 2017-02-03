@@ -1,37 +1,32 @@
+<?php require_once("../includes/session.php"); ?>
 <?php require_once("../includes/db_connection.php"); ?>
 <?php require_once("../includes/functions.php"); ?>
+
+<?php find_selected_page(); ?>
+
 <?php include("../includes/layout/header.php"); ?>
 
-    <div id="main">
-      <div id="navigation">
-        <ul class="subjects">  
-        <?php $subject_set = find_all_subjects(); ?> 
-        <?php while ($subject = mysqli_fetch_assoc($subject_set)) { 
-        	?>
-        <li>
-        <?php echo $subject["menu_name"]; ?>
-		<?php $page_set = find_pages_for_subject($subject["id"]); ?>
-		<ul class="pages">
-			<?php 
-					while ($subject = mysqli_fetch_assoc($page_set)) {
-					 ?>
-					 	<li><?php echo $subject["menu_name"];?></li>
-					<?php 
-						}
-					?>
-					<?php mysqli_free_result($page_set); ?>
-		    	</ul>
-		    </li>
-		    <?php 
-		  }
-		   ?>
-
-    <?php mysqli_free_result($subject_set); ?>
-
-		   </ul>
+	  <div id="main">
+	    <div id="navigation">
+	      <?php echo navigation($current_subject, $current_page) ?>
+	      <br>
+	      <a href="new_subject.php">+ Add a subject</a>
       </div>
       <div id="page">
+    		<?php echo message(); ?>
+        <?php if ($current_subject) { ?>
         <h2>Manage Content</h2>
+        Menu name: <?php echo $current_subject["menu_name"]; ?>
+
+        <?php } elseif ($current_page) { ?>
+       	<h2>Manage Page</h2>
+        Menu name: <?php echo $current_page["menu_name"]; ?>
+
+        <?php } else {?>
+        	Please select a subject or a page.
+
+        <?php } ?>
+        
       </div>
     </div>
   </body>
